@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"os"
-	//"sort"
+	"sort"
 
 	"fyne.io/fyne/v2/widget"
 
@@ -34,24 +33,24 @@ func main() {
 	colorizer.Colorize(bad)
 	descriptors := fresheye.WordDescriptors(bad)
 
-	//sort.Slice(descriptors, func(i, j int) bool {
-	//	return descriptors[i].Start() < descriptors[j].Start()
-	//})
+	sort.Slice(descriptors, func(i, j int) bool {
+		return descriptors[i].Start() < descriptors[j].Start()
+	})
 
 	t := make([]widget.RichTextSegment, 0, len(descriptors))
 
-	i := 0
+	// i := 0
 	for _, d := range descriptors {
 		c := colorizer.Color(d)
 		from, to := d.Start(), d.End()
 		world := text[from:to]
 
 		t = append(t, ui.NewCustomText(world, c.R, c.G, c.B, from, to))
-		i = to
+		// i = to
 	}
-	fmt.Println(text[i:])
+	// fmt.Println(text[i:])
 
-	app := ui.NewUi(t[0:100])
+	app := ui.NewUI(t[0:100])
 
 	app.Run()
 }

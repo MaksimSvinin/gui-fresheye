@@ -7,25 +7,25 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-type Ui struct {
+type UI struct {
 	window fyne.Window
 }
 
-func NewUi(t []widget.RichTextSegment) *Ui {
+func NewUI(t []widget.RichTextSegment) *UI {
 	a := app.New()
 	w := a.NewWindow("Hello")
 
-	//hello := widget.NewLabel("text")
+	// hello := widget.NewLabel("text")
 
 	text := widget.NewRichText(t...)
 
 	w.SetContent(text)
 
-	return &Ui{
+	return &UI{
 		window: w,
 	}
 }
 
-func (u *Ui) Run() {
+func (u *UI) Run() {
 	u.window.ShowAndRun()
 }

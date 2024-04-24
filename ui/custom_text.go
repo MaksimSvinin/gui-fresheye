@@ -10,26 +10,25 @@ import (
 )
 
 type CustomText struct {
-	Style widget.RichTextStyle
-	Text  string
+	style widget.RichTextStyle
+	text  string
 
 	r, g, b uint8
-	From    int
-	To      int
+	from    int
+	to      int
 }
 
-// ;ald'als'ad
 func NewCustomText(text string, r, g, b uint8, from, to int) *CustomText {
 	return &CustomText{
 		r: r,
 		g: g,
 		b: b,
 
-		Text:  text,
-		Style: widget.RichTextStyleCodeBlock,
+		text:  text,
+		style: widget.RichTextStyleCodeBlock,
 
-		From: from,
-		To:   to,
+		from: from,
+		to:   to,
 	}
 }
 
@@ -37,19 +36,27 @@ func (t *CustomText) color() color.Color {
 	return color.RGBA{t.r, t.g, t.b, 255}
 }
 
+func (t *CustomText) From() int {
+	return t.from
+}
+
+func (t *CustomText) To() int {
+	return t.to
+}
+
 // Inline should return true if this text can be included within other elements, or false if it creates a new block.
 func (t *CustomText) Inline() bool {
-	return t.Style.Inline
+	return t.style.Inline
 }
 
 // Textual returns the content of this segment rendered to plain text.
 func (t *CustomText) Textual() string {
-	return t.Text
+	return t.text
 }
 
 // Visual returns the graphical elements required to render this segment.
 func (t *CustomText) Visual() fyne.CanvasObject {
-	obj := canvas.NewText(t.Text, t.color())
+	obj := canvas.NewText(t.text, t.color())
 
 	t.Update(obj)
 	return obj
@@ -57,17 +64,18 @@ func (t *CustomText) Visual() fyne.CanvasObject {
 
 // Update applies the current state of this text segment to an existing visual.
 func (t *CustomText) Update(o fyne.CanvasObject) {
+	//nolint:errcheck // copy
 	obj := o.(*canvas.Text)
-	obj.Text = t.Text
+	obj.Text = t.text
 	obj.Color = t.color()
-	obj.Alignment = t.Style.Alignment
-	obj.TextStyle = t.Style.TextStyle
+	obj.Alignment = t.style.Alignment
+	obj.TextStyle = t.style.TextStyle
 	obj.TextSize = t.size()
 	obj.Refresh()
 }
 
 // Select tells the segment that the user is selecting the content between the two positions.
-func (t *CustomText) Select(begin, end fyne.Position) {
+func (t *CustomText) Select(_, _ fyne.Position) {
 	// no-op: this will be added when we progress to editor
 }
 
@@ -83,8 +91,8 @@ func (t *CustomText) Unselect() {
 }
 
 func (t *CustomText) size() float32 {
-	if t.Style.SizeName != "" {
-		return fyne.CurrentApp().Settings().Theme().Size(t.Style.SizeName)
+	if t.style.SizeName != "" {
+		return fyne.CurrentApp().Settings().Theme().Size(t.style.SizeName)
 	}
 
 	return theme.TextSize()
