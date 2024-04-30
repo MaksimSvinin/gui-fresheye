@@ -35,7 +35,7 @@ func (t *CustomSegment) Visual() fyne.CanvasObject {
 
 // Update applies the current state of this text segment to an existing visual.
 func (t *CustomSegment) Update(o fyne.CanvasObject) {
-	obj := o.(*canvas.Text)
+	obj, _ := o.(*canvas.Text)
 	obj.Text = t.Text
 	obj.Color = t.color()
 	obj.Alignment = t.Style.Alignment
