@@ -37,14 +37,12 @@ func showCheckWorlds(
 		}
 	}
 
-	i := 0
 	j = 0
 	text := inTextArea.Text
 
-	for range text {
+	for i := range text {
 		wi, ok := checkIndexMap[i]
 		if !ok {
-			i++
 			continue
 		}
 		to := wi.To
@@ -60,11 +58,10 @@ func showCheckWorlds(
 				Color: wi.Color,
 			})
 		j = to
-		i = to
 	}
 
 	outTextArea.Segments = append(outTextArea.Segments, &widget.TextSegment{
-		Text:  text[i:],
+		Text:  text[j:],
 		Style: widget.RichTextStyleCodeInline,
 	})
 
