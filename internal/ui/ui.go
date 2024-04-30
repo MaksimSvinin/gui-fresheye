@@ -21,7 +21,7 @@ type UI struct {
 func NewUI() *UI {
 	a := app.New()
 	w := a.NewWindow("gui fresheye")
-	w.Resize(fyne.NewSize(500, 500))
+	w.Resize(fyne.NewSize(700, 700))
 
 	sensitivityThresholdEntry, contextSizeEntry, worldCountEntry := createEntry()
 	excludeProperNames := false
@@ -98,15 +98,19 @@ func NewUI() *UI {
 		showButton,
 	)
 
+	c := container.New(
+		layout.NewGridWrapLayout(fyne.NewSize(300, 800)),
+		container.New(layout.NewBorderLayout(showAnalyzeButtons, nil, nil, nil), showAnalyzeButtons, worldsList),
+	)
+
 	w.SetContent(
 		container.New(
-			layout.NewBorderLayout(border, errorArea, nil, nil),
+			layout.NewBorderLayout(border, errorArea, nil, c),
 			border,
 			errorArea,
-			container.New(layout.NewGridLayoutWithColumns(2), container.New(layout.NewGridLayoutWithRows(2),
+			container.New(layout.NewGridLayoutWithRows(2),
 				container.NewScroll(inTextArea), container.NewScroll(outTextArea)),
-				container.New(layout.NewBorderLayout(showAnalyzeButtons, nil, nil, nil), showAnalyzeButtons, worldsList),
-			),
+			c,
 		),
 	)
 
