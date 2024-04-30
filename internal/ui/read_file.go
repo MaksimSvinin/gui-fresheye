@@ -6,6 +6,14 @@ import (
 	"path"
 
 	"fyne.io/fyne/v2"
+	"github.com/lu4p/cat"
+)
+
+const (
+	extTxt  = ".txt"
+	extDocx = ".docx"
+	extOdt  = ".odt"
+	extRtf  = ".rtf"
 )
 
 func readFile(uc fyne.URIReadCloser) (string, error) {
@@ -21,14 +29,13 @@ func readFile(uc fyne.URIReadCloser) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	return string(b), nil
+	return cat.FromBytes(b)
 }
 
 func validateExt(name string) error {
 	ext := path.Ext(name)
 
-	if ext == ".txt" || ext == ".doc" || ext == ".docs" || ext == ".ods" {
+	if ext == extTxt || ext == extDocx || ext == extOdt || ext == extRtf {
 		return nil
 	}
 	return errors.New("unsuported file format")
