@@ -51,14 +51,22 @@ func showCheckWorlds(
 
 		outTextArea.Segments = append(outTextArea.Segments,
 			&widget.TextSegment{
+				Style: widget.RichTextStyleCodeInline,
 				Text: text[j:i],
 			},
 			&CustomSegment{
+				Style: widget.RichTextStyleCodeInline,
 				Text:  text[i:to],
 				Color: wi.Color,
 			})
 		j = to
 		i = to
 	}
+
+	outTextArea.Segments = append(outTextArea.Segments, &widget.TextSegment{
+		Text: text[i:],
+		Style: widget.RichTextStyleCodeInline,
+	})
+
 	outTextArea.Refresh()
 }
