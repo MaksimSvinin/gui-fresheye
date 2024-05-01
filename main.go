@@ -1,3 +1,4 @@
+//go:generate fyne bundle -o data.go Icon.png
 package main
 
 import (

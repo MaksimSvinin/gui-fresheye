@@ -22,3 +22,5 @@ go.work
 
 .vscode
 __debug_*
+
+fyne-cross
