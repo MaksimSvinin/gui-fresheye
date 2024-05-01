@@ -9,7 +9,7 @@ import (
 
 func createBorder(
 	sensitivityThresholdEntry, contextSizeEntry, worldCountEntry *widget.Entry,
-	excludeProperNamesCheck *widget.Check,
+	excludeProperNamesCheck, win1251check *widget.Check,
 ) *fyne.Container {
 	return container.New(
 		layout.NewHBoxLayout(),
@@ -20,6 +20,7 @@ func createBorder(
 		worldCountEntry,
 		widget.NewLabel("Количество выводимых слов"),
 		excludeProperNamesCheck,
+		win1251check,
 	)
 }
 

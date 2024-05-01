@@ -6,17 +6,14 @@ import (
 	"path"
 
 	"fyne.io/fyne/v2"
-	"github.com/lu4p/cat"
+	"github.com/gelsrc/go-charset"
 )
 
 const (
-	extTxt  = ".txt"
-	extDocx = ".docx"
-	extOdt  = ".odt"
-	extRtf  = ".rtf"
+	extTxt = ".txt"
 )
 
-func readFile(uc fyne.URIReadCloser) (string, error) {
+func readFile(uc fyne.URIReadCloser, win1251 bool) (string, error) {
 	if uc == nil {
 		return "", errors.New("not select file")
 	}
@@ -25,17 +22,26 @@ func readFile(uc fyne.URIReadCloser) (string, error) {
 		return "", err
 	}
 
+	return readTxt(uc, win1251)
+}
+
+func readTxt(uc fyne.URIReadCloser, win1251 bool) (string, error) {
 	b, err := io.ReadAll(uc)
 	if err != nil {
 		return "", err
 	}
-	return cat.FromBytes(b)
+
+	if win1251 {
+		return string(charset.Cp1251BytesToRunes(b)), nil
+	}
+
+	return string(b), nil
 }
 
 func validateExt(name string) error {
 	ext := path.Ext(name)
 
-	if ext == extTxt || ext == extDocx || ext == extOdt || ext == extRtf {
+	if ext == extTxt {
 		return nil
 	}
 	return errors.New("unsuported file format")

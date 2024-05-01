@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"runtime"
 	"strconv"
 
 	"fyne.io/fyne/v2"
@@ -28,11 +29,18 @@ func NewUI() *UI {
 	excludeProperNamesCheck := widget.NewCheck("исключить имена собственные", func(b bool) {
 		excludeProperNames = b
 	})
+	win1251 := false
+	win1251check := widget.NewCheck("win1251 кодировка", func(b bool) {
+		win1251 = b
+	})
+	if runtime.GOOS == "windows" {
+		win1251check.SetChecked(true)
+	}
 
 	worlds := make([]entity.WorldInfo, 0, 10)
 	checkWorlds := make(map[int]binding.Bool)
 
-	inTextArea := widget.NewEntry()
+	inTextArea := widget.NewMultiLineEntry()
 	outTextArea := widget.NewRichText()
 	errorArea := widget.NewLabel("")
 
@@ -59,7 +67,7 @@ func NewUI() *UI {
 				if err != nil {
 					return
 				}
-				text, err := readFile(uc)
+				text, err := readFile(uc, win1251)
 				updateError(err, errorArea)
 				if err != nil {
 					return
@@ -70,17 +78,14 @@ func NewUI() *UI {
 	)
 	w.SetMainMenu(fyne.NewMainMenu(fileMenu))
 
-	border := createBorder(sensitivityThresholdEntry, contextSizeEntry, worldCountEntry, excludeProperNamesCheck)
+	border := createBorder(sensitivityThresholdEntry, contextSizeEntry, worldCountEntry,
+		excludeProperNamesCheck, win1251check)
 
 	analyzeButton := widget.NewButton("analyze", func() {
+		checkWorlds = make(map[int]binding.Bool)
 		var err error
-		worlds, err = analyze(
-			inTextArea.Text,
-			sensitivityThresholdEntry,
-			contextSizeEntry,
-			worldCountEntry,
-			excludeProperNames,
-		)
+		worlds, err = analyze(inTextArea.Text, sensitivityThresholdEntry, contextSizeEntry,
+			worldCountEntry, excludeProperNames)
 		updateError(err, errorArea)
 		if err != nil {
 			return

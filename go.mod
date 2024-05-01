@@ -8,8 +8,6 @@ require (
 )
 
 require (
-	github.com/EndFirstCorp/peekingReader v0.0.0-20171012052444-257fb6f1a1a6 // indirect
-	github.com/gabriel-vasile/mimetype v1.1.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/muesli/clusters v0.0.0-20200529215643-2700303c1762 // indirect
 	github.com/muesli/kmeans v0.3.1 // indirect
@@ -24,6 +22,7 @@ require (
 	github.com/fyne-io/gl-js v0.0.0-20220119005834-d2da28d9ccfe // indirect
 	github.com/fyne-io/glfw-js v0.0.0-20220120001248-ee7290d23504 // indirect
 	github.com/fyne-io/image v0.0.0-20220602074514-4956b0afb3d2 // indirect
+	github.com/gelsrc/go-charset v1.0.0
 	github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6 // indirect
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20240306074159-ea2d69986ecb // indirect
 	github.com/go-playground/assert/v2 v2.2.0
@@ -32,7 +31,6 @@ require (
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/jsummers/gobmp v0.0.0-20151104160322-e2ba15ffa76e // indirect
-	github.com/lu4p/cat v0.1.5
 	github.com/muesli/gamut v0.3.1
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/srwiley/oksvg v0.0.0-20221011165216-be6e8873101c // indirect

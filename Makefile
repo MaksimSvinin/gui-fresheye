@@ -24,9 +24,17 @@ build-windows:
 build-linux:
 	fyne-cross linux -arch=amd64,386 -app-id $(app_id) -app-version $(app_version) .
 
+.PHONY: release-build-windows
+release-build-windows:
+	fyne-cross windows -arch=amd64,386 -app-id $(app_id) -app-version $(app_version) -release .
+
+.PHONY: release-build-linux
+release-build-linux:
+	fyne-cross linux -arch=amd64,386 -app-id $(app_id) -app-version $(app_version) -release .
+
 .PHONY: clean
 clean:
 	rm -rf fyne-cross/ || true
 
-.PHONY: release
-release: generate lint build-windows build-linux
+.PHONY: build
+build: generate lint build-windows build-linux
