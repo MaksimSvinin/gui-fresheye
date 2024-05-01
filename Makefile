@@ -22,14 +22,11 @@ build-windows:
 
 .PHONY: build-linux
 build-linux:
-	fyne-cross linux -app-id $(app_id) -app-version $(app_version) .
-
-.PHONY: build-darwin
-	fyne-cross darwin -app-id $(app_id) -app-version $(app_version) .
+	fyne-cross linux -arch=amd64,386 -app-id $(app_id) -app-version $(app_version) .
 
 .PHONY: clean
 clean:
 	rm -rf fyne-cross/ || true
 
 .PHONY: release
-release: generate lint build-windows build-linux build-darwin
+release: generate lint build-windows build-linux
