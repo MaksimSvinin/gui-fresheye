@@ -15,7 +15,8 @@ type WorldIndex struct {
 }
 
 type WorldEndInfo struct {
-	To    int
-	World string
-	Color color.Color
+	To       int
+	World    string
+	Color    color.Color
+	CloseLoc bool
 }

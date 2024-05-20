@@ -12,6 +12,7 @@ func showCheckWorlds(
 	worlds []entity.WorldInfo,
 	inTextArea *widget.Entry,
 	outTextArea *widget.RichText,
+	closeLocCount int,
 ) {
 	outTextArea.Segments = make([]widget.RichTextSegment, 0, 50)
 
@@ -28,9 +29,10 @@ func showCheckWorlds(
 
 			for i := range w.Indexes {
 				checkIndexMap[w.Indexes[i].From] = entity.WorldEndInfo{
-					To:    w.Indexes[i].To,
-					World: w.World,
-					Color: w.Color,
+					To:       w.Indexes[i].To,
+					World:    w.World,
+					Color:    w.Color,
+					CloseLoc: false,
 				}
 			}
 			j++
@@ -51,12 +53,39 @@ func showCheckWorlds(
 			&widget.TextSegment{
 				Style: widget.RichTextStyleCodeBlock,
 				Text:  text[j:i],
-			},
-			&CustomSegment{
-				Style: widget.RichTextStyleCodeBlock,
-				Text:  text[i:to],
+			})
+
+		customText := text[i:to]
+		closeLoc := wi.CloseLoc
+
+		for k := to; k < to+closeLocCount; k++ {
+			wik, okk := checkIndexMap[k]
+			if !okk || wik.World != wi.World {
+				continue
+			}
+			closeLoc = true
+			checkIndexMap[k] = entity.WorldEndInfo{
+				To:       wik.To,
+				World:    wik.World,
+				Color:    wik.Color,
+				CloseLoc: true,
+			}
+		}
+
+		if closeLoc {
+			outTextArea.Segments = append(outTextArea.Segments, &CustomSegment{
+				Style: widget.RichTextStyleHeading,
+				Text:  customText,
 				Color: wi.Color,
 			})
+		} else {
+			outTextArea.Segments = append(outTextArea.Segments, &CustomSegment{
+				Style: widget.RichTextStyleCodeBlock,
+				Text:  customText,
+				Color: wi.Color,
+			})
+		}
+
 		j = to
 	}
 

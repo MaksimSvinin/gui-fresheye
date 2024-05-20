@@ -24,7 +24,7 @@ func NewUI() *UI {
 	w := a.NewWindow("gui fresheye")
 	w.Resize(fyne.NewSize(700, 700))
 
-	sensitivityThresholdEntry, contextSizeEntry, worldCountEntry := createEntry()
+	sensitivityThresholdEntry, contextSizeEntry, worldCountEntry, closeLocCountEntry := createEntry()
 	excludeProperNames := false
 	excludeProperNamesCheck := widget.NewCheck("исключить имена собственные", func(b bool) {
 		excludeProperNames = b
@@ -78,7 +78,7 @@ func NewUI() *UI {
 	)
 	w.SetMainMenu(fyne.NewMainMenu(fileMenu))
 
-	border := createBorder(sensitivityThresholdEntry, contextSizeEntry, worldCountEntry,
+	border := createBorder(sensitivityThresholdEntry, contextSizeEntry, worldCountEntry, closeLocCountEntry,
 		excludeProperNamesCheck, win1251check)
 
 	analyzeButton := widget.NewButton("analyze", func() {
@@ -94,28 +94,23 @@ func NewUI() *UI {
 	})
 
 	showButton := widget.NewButton("show", func() {
-		showCheckWorlds(checkWorlds, worlds, inTextArea, outTextArea)
+		closeLocCount, err := strconv.Atoi(closeLocCountEntry.Text)
+		updateError(err, errorArea)
+		if err != nil {
+			return
+		}
+		showCheckWorlds(checkWorlds, worlds, inTextArea, outTextArea, closeLocCount)
 	})
 
-	showAnalyzeButtons := container.New(
-		layout.NewGridLayoutWithRows(2),
-		analyzeButton,
-		showButton,
-	)
-
-	c := container.New(
-		NewCustomLayout(300),
-		container.New(layout.NewBorderLayout(showAnalyzeButtons, nil, nil, nil), showAnalyzeButtons, worldsList),
-	)
-
+	mainContainer := createMainContainer(analyzeButton, showButton, worldsList)
 	w.SetContent(
 		container.New(
-			layout.NewBorderLayout(border, errorArea, nil, c),
+			layout.NewBorderLayout(border, errorArea, nil, mainContainer),
 			border,
 			errorArea,
 			container.New(layout.NewGridLayoutWithColumns(2),
 				container.NewScroll(inTextArea), container.NewScroll(outTextArea)),
-			c,
+			mainContainer,
 		),
 	)
 
