@@ -40,8 +40,8 @@ func NewUI() *UI {
 	worlds := make([]entity.WorldInfo, 0, 10)
 	checkWorlds := make(map[int]binding.Bool)
 
-	inTextArea := widget.NewMultiLineEntry()
-	outTextArea := widget.NewRichText()
+	inTextArea := &widget.Entry{MultiLine: true, Wrapping: fyne.TextWrapBreak}
+	outTextArea := &widget.RichText{Wrapping: fyne.TextWrapBreak}
 	errorArea := widget.NewLabel("")
 
 	worldsList := widget.NewList(
@@ -104,7 +104,7 @@ func NewUI() *UI {
 	)
 
 	c := container.New(
-		layout.NewGridWrapLayout(fyne.NewSize(300, 800)),
+		NewCustomLayout(300),
 		container.New(layout.NewBorderLayout(showAnalyzeButtons, nil, nil, nil), showAnalyzeButtons, worldsList),
 	)
 
@@ -113,7 +113,7 @@ func NewUI() *UI {
 			layout.NewBorderLayout(border, errorArea, nil, c),
 			border,
 			errorArea,
-			container.New(layout.NewGridLayoutWithRows(2),
+			container.New(layout.NewGridLayoutWithColumns(2),
 				container.NewScroll(inTextArea), container.NewScroll(outTextArea)),
 			c,
 		),
