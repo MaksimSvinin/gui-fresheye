@@ -43,6 +43,7 @@ func NewUI() *UI {
 	inTextArea := &widget.Entry{MultiLine: true, Wrapping: fyne.TextWrapBreak}
 	outTextArea := &widget.RichText{Wrapping: fyne.TextWrapBreak}
 	errorArea := widget.NewLabel("")
+	closeWorldFlag := false
 
 	worldsList := widget.NewList(
 		func() int {
@@ -81,7 +82,7 @@ func NewUI() *UI {
 	border := createBorder(sensitivityThresholdEntry, contextSizeEntry, worldCountEntry, closeLocCountEntry,
 		excludeProperNamesCheck, win1251check)
 
-	analyzeButton := widget.NewButton("analyze", func() {
+	analyzeButton := widget.NewButton("Анализ", func() {
 		checkWorlds = make(map[int]binding.Bool)
 		var err error
 		worlds, err = analyze(inTextArea.Text, sensitivityThresholdEntry, contextSizeEntry,
@@ -93,16 +94,19 @@ func NewUI() *UI {
 		worldsList.Refresh()
 	})
 
-	showButton := widget.NewButton("show", func() {
+	showButton := widget.NewButton("Показать выделенные слова", func() {
 		closeLocCount, err := strconv.Atoi(closeLocCountEntry.Text)
 		updateError(err, errorArea)
 		if err != nil {
 			return
 		}
-		showCheckWorlds(checkWorlds, worlds, inTextArea, outTextArea, closeLocCount)
+		showCheckWorlds(checkWorlds, worlds, inTextArea, outTextArea, closeLocCount, closeWorldFlag)
 	})
 
-	mainContainer := createMainContainer(analyzeButton, showButton, worldsList)
+	closeWorld := widget.NewCheck("Показывать только близкие слова", func(b bool) { closeWorldFlag = b })
+	selectAll := widget.NewCheck("Выделить всё", func(b bool) { selectAll(b, checkWorlds, errorArea) })
+
+	mainContainer := createMainContainer(analyzeButton, showButton, closeWorld, selectAll, worldsList)
 	w.SetContent(
 		container.New(
 			layout.NewBorderLayout(border, errorArea, nil, mainContainer),
@@ -119,4 +123,16 @@ func NewUI() *UI {
 
 func (u *UI) Run() {
 	u.window.ShowAndRun()
+}
+
+func selectAll(
+	b bool,
+	checkWorlds map[int]binding.Bool,
+	errorArea *widget.Label,
+) {
+	for i := range checkWorlds {
+		if err := checkWorlds[i].Set(b); err != nil {
+			updateError(err, errorArea)
+		}
+	}
 }

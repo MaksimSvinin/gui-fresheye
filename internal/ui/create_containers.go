@@ -42,12 +42,15 @@ func createEntry() (*widget.Entry, *widget.Entry, *widget.Entry, *widget.Entry) 
 
 func createMainContainer(
 	analyzeButton, showButton *widget.Button,
+	closeWorld, selectAll *widget.Check,
 	worldsList *widget.List,
 ) *fyne.Container {
 	showAnalyzeButtons := container.New(
-		layout.NewGridLayoutWithRows(2),
+		layout.NewGridLayoutWithRows(4),
 		analyzeButton,
 		showButton,
+		closeWorld,
+		selectAll,
 	)
 
 	return container.New(

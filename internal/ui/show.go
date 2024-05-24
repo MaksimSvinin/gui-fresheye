@@ -13,6 +13,7 @@ func showCheckWorlds(
 	inTextArea *widget.Entry,
 	outTextArea *widget.RichText,
 	closeLocCount int,
+	closeWorldFlag bool,
 ) {
 	outTextArea.Segments = make([]widget.RichTextSegment, 0, 50)
 
@@ -71,20 +72,7 @@ func showCheckWorlds(
 				CloseLoc: true,
 			}
 		}
-
-		if closeLoc {
-			outTextArea.Segments = append(outTextArea.Segments, &CustomSegment{
-				Style: widget.RichTextStyleHeading,
-				Text:  customText,
-				Color: wi.Color,
-			})
-		} else {
-			outTextArea.Segments = append(outTextArea.Segments, &CustomSegment{
-				Style: widget.RichTextStyleCodeBlock,
-				Text:  customText,
-				Color: wi.Color,
-			})
-		}
+		appendWorld(closeLoc, closeWorldFlag, wi, customText, outTextArea)
 
 		j = to
 	}
@@ -95,4 +83,32 @@ func showCheckWorlds(
 	})
 
 	outTextArea.Refresh()
+}
+
+func appendWorld(
+	closeLoc, closeWorldFlag bool,
+	wi entity.WorldEndInfo,
+	customText string,
+	outTextArea *widget.RichText,
+) {
+	if closeLoc {
+		outTextArea.Segments = append(outTextArea.Segments, &CustomSegment{
+			Style: widget.RichTextStyleHeading,
+			Text:  customText,
+			Color: wi.Color,
+		})
+	} else {
+		if closeWorldFlag {
+			outTextArea.Segments = append(outTextArea.Segments, &widget.TextSegment{
+				Style: widget.RichTextStyleInline,
+				Text:  customText,
+			})
+		} else {
+			outTextArea.Segments = append(outTextArea.Segments, &CustomSegment{
+				Style: widget.RichTextStyleInline,
+				Text:  customText,
+				Color: wi.Color,
+			})
+		}
+	}
 }
