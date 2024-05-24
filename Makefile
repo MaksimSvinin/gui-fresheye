@@ -2,7 +2,7 @@ project-name=gui-fresheye
 build_filename=./build/$(project-name)
 go_ldflags="-w -s"
 app_id="io.fyne.fresheye"
-app_version="0.0.1"
+app_version="0.0.2"
 
 # Выполнить проверку линтером
 # go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.55.1
