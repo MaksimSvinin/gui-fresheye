@@ -26,7 +26,7 @@ func NewUI() *UI {
 
 	sensitivityThresholdEntry, contextSizeEntry, worldCountEntry, closeLocCountEntry := createEntry()
 	excludeProperNames := false
-	excludeProperNamesCheck := widget.NewCheck("исключить имена собственные", func(b bool) {
+	excludeProperNamesCheck := widget.NewCheck("Исключить имена собственные", func(b bool) {
 		excludeProperNames = b
 	})
 	win1251 := false
