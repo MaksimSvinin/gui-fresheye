@@ -130,7 +130,9 @@ func setMenu(
 				inTextArea.SetText(text)
 			}, w)
 		}),
-		fyne.NewMenuItem("info", func() {
+	)
+	infoMenu := fyne.NewMenu("info",
+		fyne.NewMenuItem("Open info", func() {
 			dialog.ShowForm("info", "", "", []*widget.FormItem{
 				{
 					Text:   "name:",
@@ -147,7 +149,8 @@ func setMenu(
 			}, func(b bool) {}, w)
 		}),
 	)
-	w.SetMainMenu(fyne.NewMainMenu(fileMenu))
+
+	w.SetMainMenu(fyne.NewMainMenu(fileMenu, infoMenu))
 }
 
 func selectAll(
