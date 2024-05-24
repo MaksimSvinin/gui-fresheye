@@ -61,24 +61,7 @@ func NewUI() *UI {
 		},
 	)
 
-	fileMenu := fyne.NewMenu("file",
-		fyne.NewMenuItem("Open file", func() {
-			dialog.ShowFileOpen(func(uc fyne.URIReadCloser, err error) {
-				updateError(err, errorArea)
-				if err != nil {
-					return
-				}
-				text, err := readFile(uc, win1251)
-				updateError(err, errorArea)
-				if err != nil {
-					return
-				}
-				inTextArea.SetText(text)
-			}, w)
-		}),
-	)
-	w.SetMainMenu(fyne.NewMainMenu(fileMenu))
-
+	setMenu(errorArea, &win1251, inTextArea, w, a)
 	border := createBorder(sensitivityThresholdEntry, contextSizeEntry, worldCountEntry, closeLocCountEntry,
 		excludeProperNamesCheck, win1251check)
 
@@ -123,6 +106,48 @@ func NewUI() *UI {
 
 func (u *UI) Run() {
 	u.window.ShowAndRun()
+}
+
+func setMenu(
+	errorArea *widget.Label,
+	win1251 *bool,
+	inTextArea *widget.Entry,
+	w fyne.Window,
+	a fyne.App,
+) {
+	fileMenu := fyne.NewMenu("file",
+		fyne.NewMenuItem("Open file", func() {
+			dialog.ShowFileOpen(func(uc fyne.URIReadCloser, err error) {
+				updateError(err, errorArea)
+				if err != nil {
+					return
+				}
+				text, err := readFile(uc, *win1251)
+				updateError(err, errorArea)
+				if err != nil {
+					return
+				}
+				inTextArea.SetText(text)
+			}, w)
+		}),
+		fyne.NewMenuItem("info", func() {
+			dialog.ShowForm("info", "", "", []*widget.FormItem{
+				{
+					Text:   "name:",
+					Widget: widget.NewLabel(a.Metadata().Name),
+				},
+				{
+					Text:   "info",
+					Widget: widget.NewLabel("Программа для статистического анализа текста на русском языке"),
+				},
+				{
+					Text:   "version:",
+					Widget: widget.NewLabel(a.Metadata().Version),
+				},
+			}, func(b bool) {}, w)
+		}),
+	)
+	w.SetMainMenu(fyne.NewMainMenu(fileMenu))
 }
 
 func selectAll(
