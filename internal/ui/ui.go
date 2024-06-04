@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"embed"
 	"runtime"
 	"strconv"
 
@@ -19,7 +20,7 @@ type UI struct {
 	window fyne.Window
 }
 
-func NewUI() *UI {
+func NewUI(f embed.FS) *UI {
 	a := app.New()
 	w := a.NewWindow("gui fresheye")
 	w.Resize(fyne.NewSize(700, 700))
@@ -61,7 +62,7 @@ func NewUI() *UI {
 		},
 	)
 
-	setMenu(errorArea, &win1251, inTextArea, w, a)
+	setMenu(errorArea, &win1251, inTextArea, w, a, f)
 	border := createBorder(sensitivityThresholdEntry, contextSizeEntry, worldCountEntry, closeLocCountEntry,
 		excludeProperNamesCheck, win1251check)
 
@@ -114,6 +115,7 @@ func setMenu(
 	inTextArea *widget.Entry,
 	w fyne.Window,
 	a fyne.App,
+	f embed.FS,
 ) {
 	fileMenu := fyne.NewMenu("file",
 		fyne.NewMenuItem("Open file", func() {
@@ -132,7 +134,7 @@ func setMenu(
 		}),
 	)
 	infoMenu := fyne.NewMenu("info",
-		fyne.NewMenuItem("Open info", func() {
+		fyne.NewMenuItem("Info", func() {
 			dialog.ShowForm("info", "", "", []*widget.FormItem{
 				{
 					Text:   "name:",
@@ -140,7 +142,7 @@ func setMenu(
 				},
 				{
 					Text:   "info",
-					Widget: widget.NewLabel("Программа для статистического анализа текста на русском языке"),
+					Widget: widget.NewLabel("Программа для поиска близкорасположенных слов на русском языке"),
 				},
 				{
 					Text:   "version:",
@@ -148,9 +150,23 @@ func setMenu(
 				},
 			}, func(b bool) {}, w)
 		}),
+		fyne.NewMenuItem("Help", func() {
+			dialog.ShowForm("help", "", "", readReadmeFile(f), func(b bool) {}, w)
+		}),
 	)
 
 	w.SetMainMenu(fyne.NewMainMenu(fileMenu, infoMenu))
+}
+
+func readReadmeFile(f embed.FS) []*widget.FormItem {
+	readmeFile, _ := f.ReadFile("README.md")
+
+	return []*widget.FormItem{
+		{
+			Text:   "",
+			Widget: widget.NewRichTextFromMarkdown(string(readmeFile)),
+		},
+	}
 }
 
 func selectAll(
