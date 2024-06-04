@@ -36,5 +36,12 @@ release-build-linux:
 clean:
 	rm -rf fyne-cross/ || true
 
+.PHONY: rename-build-out
+rename-build-out:
+	mv fyne-cross/bin/linux-386/gui-fresheye fyne-cross/bin/linux-386/gui-fresheye-linux-386
+	mv fyne-cross/bin/linux-amd64/gui-fresheye fyne-cross/bin/linux-amd64/gui-fresheye-linux-amd64
+	mv fyne-cross/bin/windows-386/gui-fresheye.exe fyne-cross/bin/windows-386/gui-fresheye-windows-386.exe
+	mv fyne-cross/bin/windows-amd64/gui-fresheye.exe fyne-cross/bin/windows-amd64/gui-fresheye-windows-amd64.exe
+
 .PHONY: build
-build: generate lint build-windows build-linux
+build: generate lint build-windows build-linux rename-build-out
