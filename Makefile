@@ -44,4 +44,4 @@ rename-build-out:
 	mv fyne-cross/bin/windows-amd64/gui-fresheye.exe fyne-cross/bin/windows-amd64/gui-fresheye-windows-amd64.exe
 
 .PHONY: build
-build: generate lint build-windows build-linux rename-build-out
+build: clean generate lint build-windows build-linux rename-build-out
