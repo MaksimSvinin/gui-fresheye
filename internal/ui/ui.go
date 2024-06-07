@@ -20,6 +20,9 @@ type UI struct {
 	window fyne.Window
 }
 
+const infoMsg = `Программа для поиска близко расположенных одинаковых слов (повторов) 
+и частотного анализа употребления слов в русском тексте.`
+
 func NewUI(f embed.FS) *UI {
 	a := app.New()
 	w := a.NewWindow("gui fresheye")
@@ -142,7 +145,7 @@ func setMenu(
 				},
 				{
 					Text:   "info",
-					Widget: widget.NewLabel("Программа для поиска одинаковых близкорасположенных слов на русском языке"),
+					Widget: widget.NewLabel(infoMsg),
 				},
 				{
 					Text:   "version:",
