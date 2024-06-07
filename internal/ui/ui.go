@@ -117,8 +117,8 @@ func setMenu(
 	a fyne.App,
 	f embed.FS,
 ) {
-	fileMenu := fyne.NewMenu("file",
-		fyne.NewMenuItem("Open file", func() {
+	fileMenu := fyne.NewMenu("Фаил",
+		fyne.NewMenuItem("Открыть фаил", func() {
 			dialog.ShowFileOpen(func(uc fyne.URIReadCloser, err error) {
 				updateError(err, errorArea)
 				if err != nil {
@@ -133,9 +133,9 @@ func setMenu(
 			}, w)
 		}),
 	)
-	infoMenu := fyne.NewMenu("info",
-		fyne.NewMenuItem("Info", func() {
-			dialog.ShowForm("info", "", "", []*widget.FormItem{
+	infoMenu := fyne.NewMenu("Информация",
+		fyne.NewMenuItem("О программе", func() {
+			dialog.ShowForm("О программе", "", "", []*widget.FormItem{
 				{
 					Text:   "name:",
 					Widget: widget.NewLabel(a.Metadata().Name),
@@ -150,8 +150,8 @@ func setMenu(
 				},
 			}, func(b bool) {}, w)
 		}),
-		fyne.NewMenuItem("Help", func() {
-			dialog.ShowForm("help", "", "", readReadmeFile(f), func(b bool) {}, w)
+		fyne.NewMenuItem("Справка", func() {
+			dialog.ShowForm("Справка", "", "", readReadmeFile(f), func(b bool) {}, w)
 		}),
 	)
 

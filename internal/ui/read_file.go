@@ -11,11 +11,14 @@ import (
 
 const (
 	extTxt = ".txt"
+
+	notFoundFile     = "не выбран фаил"
+	notSupportFormat = "формат файла не поддерживается"
 )
 
 func readFile(uc fyne.URIReadCloser, win1251 bool) (string, error) {
 	if uc == nil {
-		return "", errors.New("not select file")
+		return "", errors.New(notFoundFile)
 	}
 	defer uc.Close()
 	if err := validateExt(uc.URI().Name()); err != nil {
@@ -44,5 +47,5 @@ func validateExt(name string) error {
 	if ext == extTxt {
 		return nil
 	}
-	return errors.New("unsuported file format")
+	return errors.New(notSupportFormat)
 }
